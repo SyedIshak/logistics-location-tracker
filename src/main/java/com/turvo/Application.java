@@ -8,13 +8,16 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 @SpringBootApplication
 public class Application {
-	
-	/**
-	 * The main method brings up the tomcat instance and loads all the beans to the bean container.
-	 *
-	 * @param args the arguments
-	 */
-	public static void main(String[] args) {
-		SpringApplication.run(Application.class, args);
-	}
+
+    /**
+     * The Class Application launches the application with inbuilt tomcat starting
+     * at port 8080. The same class loads all the required @configuration for the
+     * application to run including connection to Mongo DB server as well.
+     *
+     * @param args
+     *            the arguments
+     */
+    public static void main(String[] args) {
+	SpringApplication.run(Application.class, args);
+    }
 }

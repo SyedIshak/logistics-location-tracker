@@ -6,32 +6,33 @@ import java.util.Date;
  * The Class Location.
  */
 public class Location {
-    
-    /** The latittude. */
-    private String latittude;
-    
+
+    /** The latitude. */
+    private String latitude;
+
     /** The longitude. */
     private String longitude;
-    
+
     /** The ping time. */
     private Date pingTime;
 
     /**
-     * Gets the latittude.
+     * Gets the latitude.
      *
-     * @return the latittude
+     * @return the latitude
      */
-    public String getLatittude() {
-	return latittude;
+    public String getLatitude() {
+	return latitude;
     }
 
     /**
-     * Sets the latittude.
+     * Sets the latitude.
      *
-     * @param latittude the new latittude
+     * @param latitude
+     *            the new latitude
      */
-    public void setLatittude(String latittude) {
-	this.latittude = latittude;
+    public void setLatitude(String latitude) {
+	this.latitude = latitude;
     }
 
     /**
@@ -46,7 +47,8 @@ public class Location {
     /**
      * Sets the longitude.
      *
-     * @param longitude the new longitude
+     * @param longitude
+     *            the new longitude
      */
     public void setLongitude(String longitude) {
 	this.longitude = longitude;
@@ -58,15 +60,16 @@ public class Location {
      * @return the ping time
      */
     public Date getPingTime() {
-        return pingTime;
+	return pingTime;
     }
 
     /**
      * Sets the ping time.
      *
-     * @param pingTime the new ping time
+     * @param pingTime
+     *            the new ping time
      */
     public void setPingTime(Date pingTime) {
-        this.pingTime = pingTime;
+	this.pingTime = pingTime;
     }
 }
