@@ -6,7 +6,6 @@ import java.util.Map;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Asset.
  */

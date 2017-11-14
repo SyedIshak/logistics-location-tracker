@@ -68,7 +68,7 @@ public class LocationTrackingServiceImpl implements LocationTrackingService {
 	    repoAsset.getLocations().add(location);
 	    Query query = new Query();
 	    query.addCriteria(Criteria.where("assetId").is(asset.getAssetId()));
-	    Update update = new Update().set("locations", repoAsset.getLocations());
+	    Update update = new Update().push("locations", location);
 	    mongoTemplate.updateFirst(query, update, Asset.class);
 	} else {
 	    if (asset.getLocations().get(0).getPingTime() == null) {
@@ -93,10 +93,9 @@ public class LocationTrackingServiceImpl implements LocationTrackingService {
 	    if (location.getPingTime() == null) {
 		location.setPingTime(new Date());
 	    }
-	    repoDevice.getLocations().add(location);
 	    Query query = new Query();
 	    query.addCriteria(Criteria.where("deviceId").is(device.getDeviceId()));
-	    Update update = new Update().set("locations", repoDevice.getLocations());
+	    Update update = new Update().push("locations", location);
 	    mongoTemplate.updateFirst(query, update, Device.class);
 	} else {
 	    if (device.getLocations().get(0).getPingTime() == null) {
@@ -160,7 +159,6 @@ public class LocationTrackingServiceImpl implements LocationTrackingService {
 	if (assets != null) {
 	    locations = new ArrayList<Location>();
 	    for (Asset asset : assets) {
-
 		locations.addAll(asset.getLocations());
 	    }
 	} else {

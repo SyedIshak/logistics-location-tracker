@@ -10,15 +10,17 @@ import com.turvo.exception.VerifyException;
  * The Class AssetUtils.
  */
 public class AssetUtils {
-    
+
     /**
      * Parses the date to long.
      *
-     * @param date the date
+     * @param date
+     *            the date
      * @return the date
-     * @throws VerifyException the verify exception
+     * @throws VerifyException
+     *             the verify exception
      */
-    public static Date parseDateToLong(String input) throws VerifyException{
+    public static Date parseDateToLong(String input) throws VerifyException {
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");
 	Date date;
 	try {
@@ -27,7 +29,7 @@ public class AssetUtils {
 	    throw new VerifyException("Invalid Date format provided");
 	}
 	return date;
-	
+
     }
 
 }
