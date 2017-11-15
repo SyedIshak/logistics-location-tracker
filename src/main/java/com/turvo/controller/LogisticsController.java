@@ -142,13 +142,17 @@ public class LogisticsController {
      * @param endTime the end time
      * @return the location by time
      */
-    @RequestMapping(value = "/getLocationByTime/{startTime}/{endTime}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getLocationByTime(@PathVariable String startTime, @PathVariable String endTime) {
+    @RequestMapping(value = "/getLocationByTime/{assetId}/{startTime}/{endTime}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getLocationByTime(@PathVariable String assetId,@PathVariable String startTime, @PathVariable String endTime) {
 	try {
 	    Verifier.verifyNullOrEmpty(startTime, "startTime cannot be null or empty");
 	    Verifier.verifyNullOrEmpty(endTime, "endTime cannot be null or empty");
+	    Verifier.verifyNullOrEmpty(assetId, "assetId cannot be null or empty");
 	    List<Location> locations = locationTrackingService
-		    .trackLocationByTime(AssetUtils.parseDateToLong(startTime), AssetUtils.parseDateToLong(endTime));
+		    .trackLocationByTime(assetId, AssetUtils.parseDateToLong(startTime), AssetUtils.parseDateToLong(endTime));
+	    if(locations.isEmpty() || locations.size() ==0) {
+		 return new ResponseEntity<>(new Response("Success", "No Results found for the provided criteria"), HttpStatus.OK);
+	    }
 	    return new ResponseEntity<>(locations, HttpStatus.OK);
 	} catch (VerifyException exception) {
 	    return new ResponseEntity<>(new Response(Constants.INVALID_INPUT, exception.getMessage()),

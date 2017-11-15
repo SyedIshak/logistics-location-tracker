@@ -3,6 +3,7 @@ package com.turvo.utils;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 import com.turvo.exception.VerifyException;
 
@@ -22,6 +23,7 @@ public class AssetUtils {
      */
     public static Date parseDateToLong(String input) throws VerifyException {
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");
+	sdf.setTimeZone(TimeZone.getTimeZone("UTC")); 
 	Date date;
 	try {
 	    date = sdf.parse(input);

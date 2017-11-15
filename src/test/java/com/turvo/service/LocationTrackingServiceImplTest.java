@@ -16,6 +16,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -56,6 +58,9 @@ public class LocationTrackingServiceImplTest {
     /** The mongo template mock. */
     @Mock
     private MongoTemplate mongoTemplateMock;
+    
+    @Mock
+    private AggregationResults<Location> groupResultsMock;
 
     /** The impl. */
     @InjectMocks
@@ -162,10 +167,10 @@ public class LocationTrackingServiceImplTest {
      */
     @Test
     public void testTrackLocationByTime() {
-	List<Asset> assets = new ArrayList<Asset>();
-	assets.add(asset);
-	Mockito.when(mongoTemplateMock.find(any(Query.class), eq(Asset.class))).thenReturn(assets);
-	Assert.assertEquals(locations, impl.trackLocationByTime(new Date(), new Date()));
+	
+	Mockito.when(mongoTemplateMock.aggregate(any(Aggregation.class),anyString(), eq(Location.class))).thenReturn(groupResultsMock);
+	Mockito.when(groupResultsMock.getMappedResults()).thenReturn(locations);
+	Assert.assertEquals(locations, impl.trackLocationByTime("test Asset Id", new Date(), new Date()));
     }
 
     /**
@@ -173,8 +178,8 @@ public class LocationTrackingServiceImplTest {
      */
     @Test(expected = VerifyException.class)
     public void testTrackLocationByTimeWithNullResponse() {
-	Mockito.when(mongoTemplateMock.find(any(Query.class), eq(Asset.class))).thenReturn(null);
-	impl.trackLocationByTime(new Date(), new Date());
+	Mockito.when(mongoTemplateMock.aggregate(any(Aggregation.class),anyString(), eq(Location.class))).thenReturn(null);
+	impl.trackLocationByTime("test Asset Id", new Date(), new Date());
     }
 
 }

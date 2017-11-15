@@ -2,12 +2,15 @@ package com.turvo.model;
 
 import java.util.Date;
 
+import org.springframework.data.mongodb.core.mapping.Field;
+
 /**
  * The Class Location.
  */
 public class Location {
 
     /** The latitude. */
+    @Field("latitude")
     private String latitude;
 
     /** The longitude. */

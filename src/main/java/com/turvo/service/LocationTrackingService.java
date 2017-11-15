@@ -61,6 +61,6 @@ public interface LocationTrackingService {
      * @param endTime the end time
      * @return the list
      */
-    public List<Location> trackLocationByTime(Date startTime,Date endTime);
+    public List<Location> trackLocationByTime(String assetId,Date startTime,Date endTime);
 
 }

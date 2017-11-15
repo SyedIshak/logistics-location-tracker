@@ -1,11 +1,20 @@
 package com.turvo.service;
 
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.fields;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.project;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
@@ -149,22 +158,13 @@ public class LocationTrackingServiceImpl implements LocationTrackingService {
      * java.util.Date)
      */
     @Override
-    public List<Location> trackLocationByTime(Date startTime, Date endTime) throws VerifyException {
-	Query query = new Query();
-	Criteria criteria = new Criteria().andOperator(Criteria.where("locations.pingTime").gte(startTime),
-		Criteria.where("locations.pingTime").lte(endTime));
-	query.addCriteria(criteria);
-	List<Location> locations;
-	List<Asset> assets = mongoTemplate.find(query, Asset.class);
-	if (assets != null) {
-	    locations = new ArrayList<Location>();
-	    for (Asset asset : assets) {
-		locations.addAll(asset.getLocations());
-	    }
-	} else {
-	    throw new VerifyException("no data retrived for the provided search criteria");
-	}
-	return locations;
+    public List<Location> trackLocationByTime(String assetId, Date startTime, Date endTime) throws VerifyException {
+	Aggregation aggregation = newAggregation(unwind("locations"),
+		match(Criteria.where("assetId").is(assetId).and("locations.pingTime").gte(startTime).lte(endTime)),
+		project(fields().and("location", "$locations")), group("location"));
+	AggregationResults<Location> groupResults = mongoTemplate.aggregate(aggregation, "Assets", Location.class);
+	Verifier.verifyNull(groupResults, "No Results found for the provided criteria");
+	return groupResults.getMappedResults();
     }
 
 }
